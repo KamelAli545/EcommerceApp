@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "633426816486",
+    "project_id": "nexshop-b544b",
+    "storage_bucket": "nexshop-b544b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:633426816486:android:fd2cd646cd4e97181b3a27",
+        "android_client_info": {
+          "package_name": "com.example.nexshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "633426816486-0dskheoj4lbj3anjctsubovvkqr2bh92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWSWNPzlLHOaYfM5K21u75rhkAXz4tFf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "633426816486-0dskheoj4lbj3anjctsubovvkqr2bh92.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
