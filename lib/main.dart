@@ -6,6 +6,7 @@ import 'package:nexshop/cubit/auth_cubit.dart';
 import 'package:nexshop/cubit/cart_cubit.dart';
 import 'package:nexshop/cubit/product_cubit.dart';
 import 'package:nexshop/firebase_options.dart';
+import 'package:nexshop/model/notification_service.dart';
 import 'package:nexshop/screens/loginScreen.dart';
 import 'package:nexshop/theme/app_theme.dart';
 import 'package:nexshop/widgets/adminShell.dart';
@@ -17,6 +18,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+   PushService.registerBackground();
+   await PushService.initLocal();
 
   runApp(const MyApp());
 }

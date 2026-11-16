@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:nexshop/model/notification_service.dart';
 import 'package:nexshop/screens/adminDashBoardScreen.dart';
 import 'package:nexshop/screens/orderScreen.dart';
 import 'package:nexshop/screens/profileScreen.dart';
 import 'package:nexshop/theme/app_theme.dart';
+import 'package:nexshop/widgets/appDialog.dart';
 
-// الشاشة الرئيسية للأدمن: الشريط ثابت تحت، والصفحات بتتبدل جواه
 class AdminShell extends StatefulWidget {
   const AdminShell({super.key});
 
@@ -13,7 +15,6 @@ class AdminShell extends StatefulWidget {
 }
 
 class _AdminShellState extends State<AdminShell> {
-  // رقم التاب الحالي (0 = المنتجات، 1 = الطلبات، 2 = البروفايل)
   int _index = 0;
 
   // الصفحات محفوظة في الذاكرة، فكل تاب يحتفظ بحالته
@@ -22,6 +23,21 @@ class _AdminShellState extends State<AdminShell> {
     OrdersScreen(),
     ProfileScreen(),
   ];
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _setupAdminNotifications());
+  }
+
+  Future<void> _setupAdminNotifications() async {
+    if (FirebaseAuth.instance.currentUser == null) return;
+
+    if (!mounted) return;
+    final allow = await AppDialogs.askNotifications(context);
+    if (!allow || !mounted) return;
+
+    await PushService.init(collection: 'admins');
+  }
 
   @override
   Widget build(BuildContext context) {

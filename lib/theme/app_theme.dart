@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:nexshop/widgets/app_button_styles.dart';
 
 class AppColors {
-  // Light Mode Colors (الأصلية كما هي تماماً بدون أي تعديل)
+  // Light Mode Colors
   static const paper = Color(0xFFF6F6F3);
   static const ink = Color(0xFF17202A);
   static const muted = Color(0xFF5B6470); // 5.7:1 on paper
@@ -12,12 +12,12 @@ class AppColors {
   static const outOfStock = Color(0xFFB42318); // 6:1 on paper
   static const hairline = Color(0xFFDCDCD6);
   static const imageWell = Color(0xFFECECE7);
-  static const fieldEdge = Color(0xFF8A929C);// 3.2:1 on paper, field boundary
-  static const navBackground = Color(0xFF1C1C1E); // خلفية الشريط
-  static const navSelected = Color(0xFF3A3A3C);   // خلفية الزرار المختار
-  static const alert = Color(0xFFB42318);          // النقطة الحمرا للإشعارات
+  static const fieldEdge = Color(0xFF8A929C); // 3.2:1 on paper, field boundary
+  static const navBackground = Color(0xFF1C1C1E);
+  static const navSelected = Color(0xFF3A3A3C);
+  static const alert = Color(0xFFB42318);
 
-  // Dark Mode Colors (ألوان الوضع الليلي الجديدة متوافقة مع نفس هوية التصميم)
+  // Dark Mode Colors
   static const darkPaper = Color(0xFF121212);
   static const darkInk = Color(0xFFF6F6F3);
   static const darkMuted = Color(0xFFA0AAB5);
@@ -27,17 +27,101 @@ class AppColors {
 }
 
 class AppText {
-  static TextStyle price({double size = 18}) => GoogleFonts.fraunces(
-    fontSize: size,
+  // ===== الأحجام: غيّر أي رقم هنا وهيتغير في التطبيق كله =====
+  static const double sizeDisplay = 28;    // عناوين الصفحات الكبيرة
+  static const double sizeTitle = 20;      // عناوين الأقسام (You may also like)
+  static const double sizeAppBar = 18;     // عنوان الـ AppBar
+  static const double sizeSubtitle = 16;   // أسماء المنتجات في الكروت
+  static const double sizeBody = 15;       // الوصف
+  static const double sizeCaption = 14;    // التصنيف والنصوص الصغيرة
+  static const double sizePriceLarge = 22; // السعر في صفحة التفاصيل
+  static const double sizePriceSmall = 15; // السعر في الكروت
+
+  // ===== المحاذاة =====
+  static const TextAlign bodyAlign = TextAlign.justify;
+
+  // ===== الألوان حسب الـ theme (dark / light) =====
+  static bool _isDark(BuildContext c) =>
+      Theme.of(c).brightness == Brightness.dark;
+
+  static Color ink(BuildContext c) =>
+      _isDark(c) ? AppColors.darkInk : AppColors.ink;
+
+  static Color muted(BuildContext c) =>
+      _isDark(c) ? AppColors.darkMuted : AppColors.muted;
+
+  // ===== الخطوط =====
+  static TextStyle display({Color? color}) => GoogleFonts.fraunces(
+    fontSize: sizeDisplay,
     fontWeight: FontWeight.w600,
-    color: AppColors.ink,
+    color: color ?? AppColors.ink,
   );
+
+  static TextStyle title({double size = sizeTitle, Color? color}) =>
+      GoogleFonts.fraunces(
+        fontSize: size,
+        fontWeight: FontWeight.w600,
+        color: color ?? AppColors.ink,
+      );
+
+  static TextStyle appBar({Color? color}) => GoogleFonts.fraunces(
+    fontSize: sizeAppBar,
+    fontWeight: FontWeight.w600,
+    color: color ?? AppColors.ink,
+  );
+
+  static TextStyle subtitle({Color? color}) => GoogleFonts.instrumentSans(
+    fontSize: sizeSubtitle,
+    fontWeight: FontWeight.w600,
+    color: color ?? AppColors.ink,
+  );
+
+  static TextStyle body({Color? color}) => GoogleFonts.instrumentSans(
+    fontSize: sizeBody,
+    height: 1.6,
+    color: color ?? AppColors.ink,
+  );
+
+  static TextStyle caption({Color? color}) => GoogleFonts.instrumentSans(
+    fontSize: sizeCaption,
+    color: color ?? AppColors.muted,
+  );
+
+  static TextStyle price({double size = sizePriceSmall}) =>
+      GoogleFonts.fraunces(
+        fontSize: size,
+        fontWeight: FontWeight.w600,
+        color: AppColors.ink,
+      );
 
   static TextStyle brand() => GoogleFonts.fraunces(
     fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.ink,
   );
+}
+
+// ===== widget للعناوين اللي سطر واحد: بيصغّر الخط لو الاسم مش مستوعب =====
+class FitText extends StatelessWidget {
+  const FitText(
+      this.text, {
+        super.key,
+        this.style,
+        this.alignment = Alignment.centerLeft,
+      });
+
+  final String text;
+  final TextStyle? style;
+  final AlignmentGeometry alignment;
+
+  @override
+  Widget build(BuildContext context) {
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: alignment,
+      child: Text(text, style: style, maxLines: 1),
+    );
+  }
 }
 
 class AppTheme {
@@ -47,11 +131,10 @@ class AppTheme {
         borderSide: BorderSide(color: color, width: width),
       );
 
-  // Light Theme (الكود الأصلي الخاص بك بالكامل بدون أي تغيير)
+  // Light Theme
   static ThemeData light() {
     final body = GoogleFonts.instrumentSansTextTheme();
     final serif = GoogleFonts.frauncesTextTheme();
-    final radius = BorderRadius.circular(6);
 
     TextStyle? display(TextStyle? s) =>
         s?.copyWith(fontWeight: FontWeight.w600, color: AppColors.ink);
@@ -125,11 +208,10 @@ class AppTheme {
     );
   }
 
-  // Dark Theme (الثيم الليلي الجديد المضاف بجانب الكود القديم)
+  // Dark Theme
   static ThemeData dark() {
     final body = GoogleFonts.instrumentSansTextTheme(ThemeData.dark().textTheme);
     final serif = GoogleFonts.frauncesTextTheme(ThemeData.dark().textTheme);
-    final radius = BorderRadius.circular(6);
 
     TextStyle? display(TextStyle? s) =>
         s?.copyWith(fontWeight: FontWeight.w600, color: AppColors.darkInk);

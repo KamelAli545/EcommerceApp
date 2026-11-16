@@ -1,11 +1,15 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:animations/animations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nexshop/cubit/product_cubit.dart';
+import 'package:nexshop/model/notification_service.dart';
 import 'package:nexshop/screens/productDetailsScreen.dart';
 import 'package:nexshop/theme/app_theme.dart';
+import 'package:nexshop/widgets/appDialog.dart';
 import 'package:nexshop/widgets/catergoryRow.dart';
 import 'package:nexshop/widgets/inputWidget.dart';
 import 'package:nexshop/widgets/productCard.dart';
@@ -32,8 +36,23 @@ class _ProductsScreenState extends State<ProductsScreen> {
     cubit.selectCategory(null);
     cubit.searchProduct('');
     cubit.loadProducts();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _setupNotifications());
+
   }
 
+  static bool _askedThisSession = false;
+
+  Future<void> _setupNotifications() async {
+    if (_askedThisSession) return;
+    if (FirebaseAuth.instance.currentUser == null) return;
+    _askedThisSession = true;
+
+    if (!mounted) return;
+    final allow = await AppDialogs.askNotifications(context);
+    if (!allow || !mounted) return;
+
+    await PushService.init();
+  }
   @override
   void dispose() {
     searchController.dispose();
@@ -49,7 +68,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
           actions:  [
             ThemeToggle()
           ],
-        ),        body: Column(
+        ),
+        body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -159,7 +179,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                   openElevation: 0,
                                   closedColor: Colors.transparent,
                                   openColor: Colors.transparent,
-                                  transitionDuration: const Duration(milliseconds: 300),
+                                  transitionType: ContainerTransitionType.fade,
+                                  transitionDuration: const Duration(milliseconds: 250),
                                   closedShape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
@@ -167,8 +188,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                     product: product,
                                     onTap: openContainer,
                                   ),
-                                  openBuilder: (context, closeContainer) =>
-                                      ProductDetailsScreen(product: product),
+                                  openBuilder: (context, closeContainer) => ProductDetailsScreen(
+                                    product: product,
+                                    relatedProducts: context.read<ProductCubit>().allProducts,
+                                  ),
                                 )
                                     .animate(delay: (index < 8 ? index * 80 : 0).ms)
                                     .fadeIn()

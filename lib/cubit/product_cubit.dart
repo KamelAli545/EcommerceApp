@@ -16,6 +16,9 @@ class ProductCubit extends Cubit<ProductState> {
   String? _category;
   bool _loaded = false;
 
+  // كل المنتجات من غير أي فلترة (بحث أو category)
+  List<Product> get allProducts => List.unmodifiable(_all);
+
   void loadProducts() {
     _sub?.cancel();
     _loaded = false;

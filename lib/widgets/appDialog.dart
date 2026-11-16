@@ -20,6 +20,17 @@ class AppDialogs {
     await _show<void>(context, _SuccessCard(message: message));
   }
 
+  static Future<bool> askNotifications(BuildContext context) {
+    return confirm(
+      context,
+      title: 'Notifications',
+      message: 'Get updates when your order is on its way or completed.',
+      cancelText: 'Not now',
+      confirmText: 'Allow',
+      icon: Icons.notifications_active,
+    );
+  }
+
   // تأكيد عام. بيرجع true لو اتضغط الزرار الأساسي، وfalse غير كده
   static Future<bool> confirm(
       BuildContext context, {
