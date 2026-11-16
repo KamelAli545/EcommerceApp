@@ -8,6 +8,13 @@ A Flutter e-commerce app with a Firebase backend, featuring separate customer an
 - Email/password sign-up and sign-in, with Google sign-in
 - Browse products by category, with live search
 - Product details and a shopping cart
+- Product details screen with a collapsing app bar that shows the product name on scroll
+- Animated "add to bag" effect that flies the product image into the cart icon
+- Bouncing scroll physics with image stretch on pull
+- "You may also like" grid with related products from the same category
+- Expandable product descriptions with "Show more" / "Show less"
+- Animated transition from product cards to product details
+- Light and dark theme support across the product screens 
 - Checkout with delivery area and payment method selection (cash on delivery)
 - Order history with status tracking
 - Profile management (name, phone, delivery address)
