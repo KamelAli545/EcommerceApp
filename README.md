@@ -46,10 +46,8 @@ A Flutter e-commerce app with a Firebase backend, featuring separate customer an
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/KamelAli545/<repo-name>.git
-   cd <repo-name>
-   ```
+   git clone https://github.com/KamelAli545/EcommerceApp.git
+   cd EcommerceApp
 
 2. Install dependencies:
    ```bash
